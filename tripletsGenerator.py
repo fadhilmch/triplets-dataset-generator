@@ -70,17 +70,18 @@ def main(args):
                                  == product]['photo'].tolist()
             com_images = list(itertools.combinations(pos_images, 2))
             for com in com_images:
-                neg_index_list = [random.randint(
-                    0, n_neg_image-1) for n_neg_image in n_neg_images]
+                neg_index_list = [[random.randint(
+                    0, n_neg_image-1) for n in range(args.n_neg)] for n_neg_image in n_neg_images]
                 # neg_index = random.randint(0, n_neg_images[0]-1)
-                for idx, neg_index in enumerate(neg_index_list):
-                    triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
-                        neg_file_paths[idx] + '/' + get_files_list(neg_file_paths[idx])[neg_index]]
-                    triplet_file.write(','.join(triplet_list)+'\n')
-                    # triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
-                    #     neg_file_paths[0] + '/' + get_files_list(neg_file_paths[0])[neg_index]]
-                    # triplet_file.write(','.join(triplet_list) + '\n')
-                    count_pairs[class_name] += 1
+                for idx, class_index in enumerate(neg_index_list):
+                    for neg_index in class_index:
+                        triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
+                            neg_file_paths[idx] + '/' + get_files_list(neg_file_paths[idx])[neg_index]]
+                        triplet_file.write(','.join(triplet_list)+'\n')
+                        # triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
+                        #     neg_file_paths[0] + '/' + get_files_list(neg_file_paths[0])[neg_index]]
+                        # triplet_file.write(','.join(triplet_list) + '\n')
+                        count_pairs[class_name] += 1
         print('Total triplet pairs: ' + str(count_pairs[class_name]))
     print('\nTotal new triplet pairs added: ' + str(sum(count_pairs.values())))
     triplet_file.close()
