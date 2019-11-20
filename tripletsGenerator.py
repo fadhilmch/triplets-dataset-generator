@@ -20,7 +20,7 @@ def get_files_list(directory_path, class_name=None):
 
 def main(args):
     print('Running program to sample triplet pair from Street2Shop Dataset...')
-    images_path = os.path.join(args.dataset_dir, 'images')
+    images_path = args.dataset_dir
     classes_list = [dir_ for dir_ in os.listdir(
         images_path) if os.path.isdir(os.path.join(images_path, dir_))]
 
@@ -100,6 +100,8 @@ if __name__ == '__main__':
     parser.add_argument('--number_neg_sample',
                         dest='n_neg', type=int, default=1)  # Number of negative samples for each negative class
     parser.add_argument('--overwrite', dest='overwrite',
+                        action='store_true')
+    parser.add_argument('--crop', dest='crop',
                         action='store_true')
     args = parser.parse_args()
 
