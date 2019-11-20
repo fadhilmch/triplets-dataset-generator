@@ -19,6 +19,12 @@ def get_files_list(directory_path, class_name=None):
 
 
 def main(args):
+    if args.dataset_dir == None:
+        raise ValueError(
+            'Path to dataset directory is required!')
+    if args.pair_dir == None:
+        raise ValueError(
+            'Path to pair file directory is required!')
     print('Running program to sample triplet pair from Street2Shop Dataset...')
     images_path = args.dataset_dir
     classes_list = [dir_ for dir_ in os.listdir(
