@@ -102,7 +102,7 @@ if __name__ == '__main__':
     parser.add_argument('--pair_dir', dest='pair_dir',
                         type=str)
     parser.add_argument('--output_file', dest='output_file',
-                        type=str, default='triplet_pairs.txt')
+                        type=str, default='triplet_pairs.csv')
     parser.add_argument('--number_neg_class',
                         dest='n_neg_class', type=int, default=1)  # Number of negative classes for negative sampling
     parser.add_argument('--number_neg_sample',
