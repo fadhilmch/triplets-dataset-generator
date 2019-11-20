@@ -12,7 +12,7 @@ Tools to create triplet pair dataset for [Street2Shop](http://www.tamaraberg.com
 $ pip install -r requirements.txt
 ```
 
-* Download Street2Shop Dataset
+* Download Street2Shop Dataset <br/>
 Check [my other repository](https://github.com/fadhilmch/street2shop-download) to download images from Street2Shop Dataset
 
 # Usage
