@@ -97,7 +97,7 @@ def main(args):
                             temp_idx = random.randint(0, n_inclass-1)
                         triplet_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
                             os.path.join(images_path, class_name) + '/' + get_files_list(inclass_path)[temp_idx]]
-                        triplet_file.write(','.join(triplet_list)+'\n')
+                        triplet_file.write(','.join(triplet_list) + '\n')
                         count_pairs[class_name] += 1
 
                 for idx, class_index in enumerate(neg_index_list):
