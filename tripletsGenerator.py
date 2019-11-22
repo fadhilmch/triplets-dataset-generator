@@ -57,10 +57,15 @@ def main(args):
         pair_data = json.load(file_meta)
         file_meta.close()
         neg_classes = random.sample([x for x in range(
-            0, index)]+[x for x in range(index+1, len(classes_list))], k=args.n_neg_class)
+            0, index)] + [x for x in range(index + 1, len(classes_list))], k=args.n_neg_class)
+        print(neg_classes)
         neg_file_paths = [os.path.join(images_path, classes_list[neg_class])
                           for neg_class in neg_classes]
         n_neg_images = [len(get_files_list(x)) for x in neg_file_paths]
+
+        if args.inclass_neg:
+            inclass_path = os.path.join(images_path, class_name)
+            n_inclass = len(get_files_list(inclass_path))
 
         print('Total images: ' + str(len(pair_data)) + ' images')
         existing_images = set(get_files_list(images_path, class_name))
@@ -76,9 +81,22 @@ def main(args):
                                  == product]['photo'].tolist()
             com_images = list(itertools.combinations(pos_images, 2))
             for com in com_images:
+                # Get index(s) of the image in class randomly
                 neg_index_list = [[random.randint(
                     0, n_neg_image-1) for n in range(args.n_neg)] for n_neg_image in n_neg_images]
                 # neg_index = random.randint(0, n_neg_images[0]-1)
+
+                # Handle inclass
+                if args.inclass_neg:
+                    for idx in range(args.n_neg):
+                        temp_idx = random.randint(0, n_inclass-1)
+                        while get_files_list(inclass_path)[temp_idx] in com:
+                            temp_idx = random.randint(0, n_inclass-1)
+                        triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
+                            images_path + class_name + '/' + get_files_list(inclass_path)[temp_idx]]
+                        triplet_file.write(','.join(triplet_list)+'\n')
+                        count_pairs[class_name] += 1
+
                 for idx, class_index in enumerate(neg_index_list):
                     for neg_index in class_index:
                         triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
@@ -109,8 +127,8 @@ if __name__ == '__main__':
                         dest='n_neg', type=int, default=1)  # Number of negative samples for each negative class
     parser.add_argument('--overwrite', dest='overwrite',
                         action='store_true')
-    parser.add_argument('--crop', dest='crop',
-                        action='store_true')
+    parser.add_argument('--inclass_neg', dest='inclass_neg',
+                        action='store_true')  # Include inclass negative sample
     args = parser.parse_args()
 
     main(args)
