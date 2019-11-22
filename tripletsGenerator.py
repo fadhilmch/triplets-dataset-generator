@@ -58,7 +58,6 @@ def main(args):
         file_meta.close()
         neg_classes = random.sample([x for x in range(
             0, index)] + [x for x in range(index + 1, len(classes_list))], k=args.n_neg_class)
-        print(neg_classes)
         neg_file_paths = [os.path.join(images_path, classes_list[neg_class])
                           for neg_class in neg_classes]
         n_neg_images = [len(get_files_list(x)) for x in neg_file_paths]
@@ -69,16 +68,20 @@ def main(args):
 
         print('Total images: ' + str(len(pair_data)) + ' images')
         existing_images = set(get_files_list(images_path, class_name))
-        for data in pair_data:
-            if (str(data['photo'])+'.JPEG') not in existing_images:
-                pair_data.remove(data)
+        pair_data = list(filter(lambda data: str(
+            data['photo']) + '.JPEG' in existing_images, pair_data))
+        # for data in pair_data:
+        #     if (str(data['photo'])+'.JPEG') not in existing_images:
+        #         pair_data.remove(data)
+        #     else:
+        #         print(str(data['photo'])+'.JPEG')
         print('Total available images: ' +
               str(len(pair_data)) + ' images')
         pair_df = pd.DataFrame.from_dict(pair_data)
         product_list = pair_df['product'].unique()
         for product in product_list:
             pos_images = pair_df[pair_df['product']
-                                 == product]['photo'].tolist()
+                                 == product]['photo'].unique().tolist()
             com_images = list(itertools.combinations(pos_images, 2))
             for com in com_images:
                 # Get index(s) of the image in class randomly
@@ -92,14 +95,14 @@ def main(args):
                         temp_idx = random.randint(0, n_inclass-1)
                         while get_files_list(inclass_path)[temp_idx] in com:
                             temp_idx = random.randint(0, n_inclass-1)
-                        triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
-                            images_path + class_name + '/' + get_files_list(inclass_path)[temp_idx]]
+                        triplet_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
+                            os.path.join(images_path, class_name) + '/' + get_files_list(inclass_path)[temp_idx]]
                         triplet_file.write(','.join(triplet_list)+'\n')
                         count_pairs[class_name] += 1
 
                 for idx, class_index in enumerate(neg_index_list):
                     for neg_index in class_index:
-                        triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
+                        triplet_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
                             neg_file_paths[idx] + '/' + get_files_list(neg_file_paths[idx])[neg_index]]
                         triplet_file.write(','.join(triplet_list)+'\n')
                         # triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
