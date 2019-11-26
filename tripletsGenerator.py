@@ -26,8 +26,8 @@ def split_dataset(output_path, df):
     train, val = train_test_split(df, test_size=0.3)
     train_file = filepath + 'train_' + filename + '.csv'
     val_file = filepath + 'val_' + filename + '.csv'
-    train.to_csv(train_file)
-    val.to_csv(val_file)
+    train.to_csv(train_file, header=False, index=False)
+    val.to_csv(val_file, header=False, index=False)
     return train_file, val_file
 
 
@@ -114,7 +114,7 @@ def main(args):
         print('\nSave train file to: ' + train_path)
         print('Save validation file to: ' + val_path)
     else:
-        triplet_df.to_csv(args.output_file)
+        triplet_df.to_csv(args.output_file, header=False, index=False)
         print('\nSave file to: ' + args.output_file)
 
 
