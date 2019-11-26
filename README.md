@@ -7,12 +7,18 @@ Tools to create triplet pair dataset for [Street2Shop](http://www.tamaraberg.com
 # Requirements
 
 * Install Python Packages
-
 ```
 $ pip install -r requirements.txt
 ```
 
-* Download Street2Shop Dataset <br/>
+* Download and unzip pairs list file
+```
+$ curl -O http://www.tamaraberg.com/street2shop/wheretobuyit/meta.zip
+$ unzip meta.zip
+$ rm meta.zip
+```
+
+* **Download Street2Shop Dataset** <br/>
 Check [my other repository](https://github.com/fadhilmch/street2shop-download) to download images from Street2Shop Dataset
 
 # Usage
@@ -21,19 +27,25 @@ Check [my other repository](https://github.com/fadhilmch/street2shop-download) t
 * Option 1: Make a triplet and randomly select one negative sample (Overwrite if output file already exist)
 
 ```sh
-$ python tripletsGenerator.py --dataset_dir '../dataset/' --pair_dir '../street2shop/meta' --overwrite
+$ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite
 ```
 
-* Option 2: Make a triplet and randomly select one negative sample from the two different negative classes (Overwrite if output file already exist)
+* Option 2: Make a triplet and randomly select two negative sample (one from other class and one from inclass) (Overwrite if output file already exist)
 
 ```sh
-$ python tripletsGenerator.py --dataset_dir '../dataset/' --pair_dir '../street2shop/meta' --overwrite --number_neg_class 2 
+$ python tripletsGenerator.py --dataset_dir '../dataset/' --inclass_neg --overwrite
 ```
 
-* Option 3: Make a triplet and randomly select two negative samples from the two different negative classes (Overwrite if output file already exist)
+* Option 3: Make a triplet and randomly select one negative sample from the two different negative classes (Overwrite if output file already exist)
 
 ```sh
-$ python tripletsGenerator.py --dataset_dir '../dataset/' --pair_dir '../street2shop/meta' --overwrite --number_neg_class 2 --number_neg_sample 2
+$ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite --number_neg_class 2 
+```
+
+* Option 4: Make a triplet and randomly select two negative samples from the two different negative classes (Overwrite if output file already exist)
+
+```sh
+$ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite --number_neg_class 2 --number_neg_sample 2
 ```
 
 * Extra: Running Options
@@ -44,4 +56,5 @@ $ python tripletsGenerator.py --dataset_dir '../dataset/' --pair_dir '../street2
   --number_neg_class        Number of negative classes for negative sampling [default: 1]
   --number_neg_sample       Number of negative sample for each class in negative sampling [default:1]
   --overwrite               Overwrite the existed file
+  --inclass_neg             Include negative sampling from the same class
 ```
