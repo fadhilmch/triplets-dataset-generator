@@ -7,9 +7,15 @@ Tools to create triplet pair dataset for [Street2Shop](http://www.tamaraberg.com
 # Requirements
 
 * Install Python Packages
-
 ```
 $ pip install -r requirements.txt
+```
+
+* Download and unzip pairs list file
+```
+$ curl -O http://www.tamaraberg.com/street2shop/wheretobuyit/meta.zip
+$ unzip meta.zip
+$ rm meta.zip
 ```
 
 * Download Street2Shop Dataset <br/>
@@ -21,19 +27,19 @@ Check [my other repository](https://github.com/fadhilmch/street2shop-download) t
 * Option 1: Make a triplet and randomly select one negative sample (Overwrite if output file already exist)
 
 ```sh
-$ python tripletsGenerator.py --dataset_dir '../dataset/' --pair_dir '../street2shop/meta' --overwrite
+$ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite
 ```
 
 * Option 2: Make a triplet and randomly select one negative sample from the two different negative classes (Overwrite if output file already exist)
 
 ```sh
-$ python tripletsGenerator.py --dataset_dir '../dataset/' --pair_dir '../street2shop/meta' --overwrite --number_neg_class 2 
+$ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite --number_neg_class 2 
 ```
 
 * Option 3: Make a triplet and randomly select two negative samples from the two different negative classes (Overwrite if output file already exist)
 
 ```sh
-$ python tripletsGenerator.py --dataset_dir '../dataset/' --pair_dir '../street2shop/meta' --overwrite --number_neg_class 2 --number_neg_sample 2
+$ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite --number_neg_class 2 --number_neg_sample 2
 ```
 
 * Extra: Running Options
