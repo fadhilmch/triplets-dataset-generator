@@ -123,6 +123,7 @@ def main(args):
         print('Total triplet pairs: ' + str(count_pairs[class_name]))
     print('\nTotal new triplet pairs added: ' + str(sum(count_pairs.values())))
     triplet_file.close()
+    print('Output file: ' + args.output_file)
     if(args.split):
         train_path, val_path = split_dataset(args.output_file)
         print('\nSplit file and save to ' + train_path + ' and ' + val_path)
@@ -149,7 +150,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args)
-    print('Output file: ' + args.output_file)
     print('Finished')
 
     exit(0)
