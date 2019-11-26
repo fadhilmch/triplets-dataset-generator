@@ -30,13 +30,19 @@ Check [my other repository](https://github.com/fadhilmch/street2shop-download) t
 $ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite
 ```
 
-* Option 2: Make a triplet and randomly select one negative sample from the two different negative classes (Overwrite if output file already exist)
+* Option 2: Make a triplet and randomly select two negative sample (one from other class and one from inclass) (Overwrite if output file already exist)
+
+```sh
+$ python tripletsGenerator.py --dataset_dir '../dataset/' --inclass_neg --overwrite
+```
+
+* Option 3: Make a triplet and randomly select one negative sample from the two different negative classes (Overwrite if output file already exist)
 
 ```sh
 $ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite --number_neg_class 2 
 ```
 
-* Option 3: Make a triplet and randomly select two negative samples from the two different negative classes (Overwrite if output file already exist)
+* Option 4: Make a triplet and randomly select two negative samples from the two different negative classes (Overwrite if output file already exist)
 
 ```sh
 $ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite --number_neg_class 2 --number_neg_sample 2
@@ -50,4 +56,5 @@ $ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite --number_n
   --number_neg_class        Number of negative classes for negative sampling [default: 1]
   --number_neg_sample       Number of negative sample for each class in negative sampling [default:1]
   --overwrite               Overwrite the existed file
+  --inclass_neg             Include negative sampling from the same class
 ```
