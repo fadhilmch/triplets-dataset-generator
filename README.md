@@ -18,7 +18,7 @@ $ unzip meta.zip
 $ rm meta.zip
 ```
 
-* Download Street2Shop Dataset <br/>
+* **Download Street2Shop Dataset** <br/>
 Check [my other repository](https://github.com/fadhilmch/street2shop-download) to download images from Street2Shop Dataset
 
 # Usage
