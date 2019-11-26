@@ -57,4 +57,5 @@ $ python tripletsGenerator.py --dataset_dir '../dataset/' --overwrite --number_n
   --number_neg_sample       Number of negative sample for each class in negative sampling [default:1]
   --overwrite               Overwrite the existed file
   --inclass_neg             Include negative sampling from the same class
+  --split                   Split the dataset into train and val
 ```
