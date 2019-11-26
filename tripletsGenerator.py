@@ -20,8 +20,7 @@ def get_files_list(directory_path, class_name=None):
         return [file for root, _, files_list in os.walk(directory_path) for file in files_list if re.match(r'([\w]+\.(?:' + ext + '))', file)]
 
 
-def split_dataset(output_path):
-    df = pd.read_csv(output_path, names=['query', 'positive', 'negative'])
+def split_dataset(output_path, df):
     filename = output_path.split('/')[-1].split('.')[0]
     filepath = '/'.join(output_path.split('/')[:-1])
     train, val = train_test_split(df, test_size=0.3)
@@ -55,7 +54,8 @@ def main(args):
         triplet_file = open(args.output_file, 'w+')
         triplet_file.close()
 
-    triplet_file = open(args.output_file, '+a')
+    # triplet_file = open(args.output_file, '+a')
+    triplet_list = []
     count_pairs = {class_name: 0 for class_name in classes_list}
 
     for index, class_name in enumerate(classes_list):
@@ -106,27 +106,31 @@ def main(args):
                         temp_idx = random.randint(0, n_inclass-1)
                         while get_files_list(inclass_path)[temp_idx] in com:
                             temp_idx = random.randint(0, n_inclass-1)
-                        triplet_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
+                        temp_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
                             os.path.join(images_path, class_name) + '/' + get_files_list(inclass_path)[temp_idx]]
-                        triplet_file.write(','.join(triplet_list) + '\n')
+                        triplet_list.append(temp_list)
+                        # triplet_file.write(','.join(triplet_list) + '\n')
                         count_pairs[class_name] += 1
 
                 for idx, class_index in enumerate(neg_index_list):
                     for neg_index in class_index:
-                        triplet_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
+                        temp_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
                             neg_file_paths[idx] + '/' + get_files_list(neg_file_paths[idx])[neg_index]]
-                        triplet_file.write(','.join(triplet_list)+'\n')
-                        # triplet_list = [images_path + class_name + '/' + str(img) + '.JPEG' for img in com] + [
-                        #     neg_file_paths[0] + '/' + get_files_list(neg_file_paths[0])[neg_index]]
-                        # triplet_file.write(','.join(triplet_list) + '\n')
+                        triplet_list.append(temp_list)
+                        # triplet_file.write(','.join(triplet_list)+'\n')
                         count_pairs[class_name] += 1
         print('Total triplet pairs: ' + str(count_pairs[class_name]))
     print('\nTotal new triplet pairs added: ' + str(sum(count_pairs.values())))
-    triplet_file.close()
-    print('Output file: ' + args.output_file)
+    # triplet_file.close()
+    cols = ['que', 'pos', 'neg']
+    triplet_df = pd.DataFrame(triplet_list, columns=cols)
     if(args.split):
-        train_path, val_path = split_dataset(args.output_file)
-        print('\nSplit file and save to ' + train_path + ' and ' + val_path)
+        train_path, val_path = split_dataset(args.output_file, triplet_df)
+        print('\nSave train file to: ' + train_path)
+        print('Save validation file to: ' + val_path)
+    else:
+        triplet_df.to_csv(args.output_file)
+        print('\nSave file to: ' + args.output_file)
 
 
 if __name__ == '__main__':
