@@ -54,7 +54,6 @@ def main(args):
         triplet_file = open(args.output_file, 'w+')
         triplet_file.close()
 
-    # triplet_file = open(args.output_file, '+a')
     triplet_list = []
     count_pairs = {class_name: 0 for class_name in classes_list}
 
@@ -81,11 +80,6 @@ def main(args):
         existing_images = set(get_files_list(images_path, class_name))
         pair_data = list(filter(lambda data: str(
             data['photo']) + '.JPEG' in existing_images, pair_data))
-        # for data in pair_data:
-        #     if (str(data['photo'])+'.JPEG') not in existing_images:
-        #         pair_data.remove(data)
-        #     else:
-        #         print(str(data['photo'])+'.JPEG')
         print('Total available images: ' +
               str(len(pair_data)) + ' images')
         pair_df = pd.DataFrame.from_dict(pair_data)
@@ -98,7 +92,6 @@ def main(args):
                 # Get index(s) of the image in class randomly
                 neg_index_list = [[random.randint(
                     0, n_neg_image-1) for n in range(args.n_neg)] for n_neg_image in n_neg_images]
-                # neg_index = random.randint(0, n_neg_images[0]-1)
 
                 # Handle inclass
                 if args.inclass_neg:
@@ -109,7 +102,6 @@ def main(args):
                         temp_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
                             os.path.join(images_path, class_name) + '/' + get_files_list(inclass_path)[temp_idx]]
                         triplet_list.append(temp_list)
-                        # triplet_file.write(','.join(triplet_list) + '\n')
                         count_pairs[class_name] += 1
 
                 for idx, class_index in enumerate(neg_index_list):
@@ -117,11 +109,9 @@ def main(args):
                         temp_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
                             neg_file_paths[idx] + '/' + get_files_list(neg_file_paths[idx])[neg_index]]
                         triplet_list.append(temp_list)
-                        # triplet_file.write(','.join(triplet_list)+'\n')
                         count_pairs[class_name] += 1
         print('Total triplet pairs: ' + str(count_pairs[class_name]))
     print('\nTotal new triplet pairs added: ' + str(sum(count_pairs.values())))
-    # triplet_file.close()
     cols = ['que', 'pos', 'neg']
     triplet_df = pd.DataFrame(triplet_list, columns=cols)
     if(args.split):
