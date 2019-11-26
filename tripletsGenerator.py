@@ -48,12 +48,6 @@ def main(args):
         raise ValueError(
             'The number of negative classes sample you want is exceeding the number of classes you have. Use smaller number of negative class samples')
 
-    # Overwriting the existing file
-    if args.overwrite:
-        print('Overwrite the existing file....')
-        triplet_file = open(args.output_file, 'w+')
-        triplet_file.close()
-
     triplet_list = []
     count_pairs = {class_name: 0 for class_name in classes_list}
 
@@ -114,6 +108,7 @@ def main(args):
     print('\nTotal new triplet pairs added: ' + str(sum(count_pairs.values())))
     cols = ['que', 'pos', 'neg']
     triplet_df = pd.DataFrame(triplet_list, columns=cols)
+
     if(args.split):
         train_path, val_path = split_dataset(args.output_file, triplet_df)
         print('\nSave train file to: ' + train_path)
@@ -135,8 +130,6 @@ if __name__ == '__main__':
                         dest='n_neg_class', type=int, default=1)  # Number of negative classes for negative sampling
     parser.add_argument('--number_neg_sample',
                         dest='n_neg', type=int, default=1)  # Number of negative samples for each negative class
-    parser.add_argument('--overwrite', dest='overwrite',
-                        action='store_true')
     parser.add_argument('--inclass_neg', dest='inclass_neg',
                         action='store_true')  # Include inclass negative sample
     parser.add_argument('--split', dest='split',
