@@ -7,6 +7,8 @@ import pandas as pd
 import itertools
 import random
 from argparse import ArgumentParser
+from sklearn.model_selection import train_test_split
+
 
 ext = 'jpg|jpeg|bmp|png|ppm|JPG|JPEG'
 
@@ -16,6 +18,18 @@ def get_files_list(directory_path, class_name=None):
         return [file for root, _, files_list in os.walk(os.path.join(directory_path, class_name)) for file in files_list if re.match(r'([\w]+\.(?:' + ext + '))', file)]
     else:
         return [file for root, _, files_list in os.walk(directory_path) for file in files_list if re.match(r'([\w]+\.(?:' + ext + '))', file)]
+
+
+def split_dataset(output_path):
+    df = pd.read_csv(output_path, names=['query', 'positive', 'negative'])
+    filename = output_path.split('/')[-1].split('.')[0]
+    filepath = '/'.join(output_path.split('/')[:-1])
+    train, val = train_test_split(df, test_size=0.3)
+    train_file = filepath + 'train_' + filename + '.csv'
+    val_file = filepath + 'val_' + filename + '.csv'
+    train.to_csv(train_file)
+    val.to_csv(val_file)
+    return train_file, val_file
 
 
 def main(args):
@@ -109,6 +123,9 @@ def main(args):
         print('Total triplet pairs: ' + str(count_pairs[class_name]))
     print('\nTotal new triplet pairs added: ' + str(sum(count_pairs.values())))
     triplet_file.close()
+    if(args.split):
+        train_path, val_path = split_dataset(args.output_file)
+        print('\nSplit file and save to ' + train_path + ' and ' + val_path)
 
 
 if __name__ == '__main__':
@@ -127,6 +144,8 @@ if __name__ == '__main__':
                         action='store_true')
     parser.add_argument('--inclass_neg', dest='inclass_neg',
                         action='store_true')  # Include inclass negative sample
+    parser.add_argument('--split', dest='split',
+                        action='store_true')
     args = parser.parse_args()
 
     main(args)
