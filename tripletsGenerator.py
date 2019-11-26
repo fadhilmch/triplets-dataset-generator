@@ -22,9 +22,6 @@ def main(args):
     if args.dataset_dir == None:
         raise ValueError(
             'Path to dataset directory is required!')
-    if args.pair_dir == None:
-        raise ValueError(
-            'Path to pair file directory is required!')
     print('Running program to sample triplet pair from Street2Shop Dataset...')
     images_path = args.dataset_dir
     classes_list = [dir_ for dir_ in os.listdir(
@@ -49,9 +46,9 @@ def main(args):
 
     for index, class_name in enumerate(classes_list):
         print('\n=======> Sampling triplet for class: ' + class_name)
-        pair_file = 'json/train_pairs_' + class_name + '.json'
+        pair_file = 'meta/json/train_pairs_' + class_name + '.json'
         try:
-            file_meta = open(args.pair_dir + pair_file, 'r')
+            file_meta = open(pair_file, 'r')
         except ValueError:
             print("You don't have the pair file(s)")
         pair_data = json.load(file_meta)
@@ -119,8 +116,6 @@ if __name__ == '__main__':
 
     # Data handling parameters
     parser.add_argument('--dataset_dir', dest='dataset_dir',
-                        type=str)
-    parser.add_argument('--pair_dir', dest='pair_dir',
                         type=str)
     parser.add_argument('--output_file', dest='output_file',
                         type=str, default='triplet_pairs.csv')
