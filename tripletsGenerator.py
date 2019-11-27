@@ -93,15 +93,15 @@ def main(args):
                         temp_idx = random.randint(0, n_inclass-1)
                         while get_files_list(inclass_path)[temp_idx] in com:
                             temp_idx = random.randint(0, n_inclass-1)
-                        temp_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
-                            os.path.join(images_path, class_name) + '/' + get_files_list(inclass_path)[temp_idx]]
+                        temp_list = [class_name + '/' + str(img) + '.JPEG' for img in com] + [
+                            class_name + '/' + get_files_list(inclass_path)[temp_idx]]
                         triplet_list.append(temp_list)
                         count_pairs[class_name] += 1
 
                 for idx, class_index in enumerate(neg_index_list):
                     for neg_index in class_index:
-                        temp_list = [os.path.join(images_path, class_name) + '/' + str(img) + '.JPEG' for img in com] + [
-                            neg_file_paths[idx] + '/' + get_files_list(neg_file_paths[idx])[neg_index]]
+                        temp_list = [class_name + '/' + str(img) + '.JPEG' for img in com] + [
+                            neg_file_paths[idx].split('/')[-1] + '/' + get_files_list(neg_file_paths[idx])[neg_index]]
                         triplet_list.append(temp_list)
                         count_pairs[class_name] += 1
         print('Total triplet pairs: ' + str(count_pairs[class_name]))
