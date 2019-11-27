@@ -48,7 +48,6 @@ $ python tripletsGenerator.py --dataset_dir '../dataset/' --number_neg_class 2 -
 * Extra: Running Options
 ```sh
   --dataset_dir             Path to images dataset [Required]
-  --pair_dir                Path to pair meta file [Required]
   --output_file             Output file name and directory [default: /triplet_pairs.txt]
   --number_neg_class        Number of negative classes for negative sampling [default: 1]
   --number_neg_sample       Number of negative sample for each class in negative sampling [default:1]
